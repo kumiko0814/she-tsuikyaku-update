@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>追客配信 アップデート（モック）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#D9A69C; --rose-d:#C08B80; --rose-soft:#F6EAE6;
+    --slate:#6E8F97; --slate-d:#4C6B73; --slate-soft:#E9F0F1;
+    --cream:#FAF7F4; --ink:#3A4449; --muted:#93A0A6; --line:#E7E2DD;
+    --cust:#EDEDED; --cust-ink:#444;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:"游ゴシック","Yu Gothic",YuGothic,"Hiragino Kaku Gothic ProN",sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 70px;line-height:1.7;}
+  .hero{background:linear-gradient(135deg,#E8BFB5 0%,#EFD7CF 30%,#C5D2D4 62%,#5F7F88 100%);
+    padding:46px 18px 40px;text-align:center;color:#fff;}
+  .hero .en{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;letter-spacing:.22em;opacity:.95;}
+  .hero h1{font-size:23px;font-weight:800;letter-spacing:.03em;margin:9px 0 6px;text-shadow:0 1px 8px rgba(60,80,90,.25);}
+  .hero .sub{font-size:12.5px;opacity:.95;}
+  .wrap{max-width:560px;margin:-22px auto 0;padding:0 14px;}
+
+  .sec-title{font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--slate);
+    display:inline-block;border-radius:20px;padding:5px 16px;margin:30px 0 4px;}
+  .sec-title.rose{background:var(--rose);}
+  .lead{font-size:14px;font-weight:700;color:var(--slate-d);margin:6px 2px 14px;}
+
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 18px rgba(76,107,115,.09);
+    padding:18px 18px;margin-bottom:14px;}
+
+  /* 数字ピル */
+  .nums{display:flex;gap:8px;flex-wrap:wrap;}
+  .num{flex:1;min-width:150px;background:var(--slate-soft);border-radius:12px;padding:12px 12px;text-align:center;}
+  .num .big{font-size:19px;font-weight:800;color:var(--slate-d);}
+  .num .big em{font-style:normal;color:var(--rose-d);}
+  .num .lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* KPI階段 */
+  .stair{display:flex;flex-direction:column;gap:9px;}
+  .step{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:13px 15px;
+    box-shadow:0 4px 14px rgba(76,107,115,.07);border-left:5px solid var(--slate);}
+  .step.now{border-left-color:var(--rose);}
+  .step .no{width:26px;height:26px;border-radius:50%;background:var(--slate);color:#fff;font-weight:800;
+    font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .step.now .no{background:var(--rose);}
+  .step .txt{font-size:13px;}
+  .step .txt b{font-size:14px;color:var(--slate-d);}
+  .step .txt .g{color:var(--rose-d);font-weight:800;}
+  .arrow-c{text-align:center;color:var(--rose);font-size:16px;line-height:.6;margin:-3px 0;}
+
+  /* ヒアリング吹き出し */
+  .voice{background:var(--rose-soft);border-radius:14px;padding:13px 15px;margin:9px 0;font-size:13px;color:#6B5A54;}
+  .voice .q{font-weight:800;color:var(--rose-d);font-size:12.5px;margin-bottom:4px;}
+
+  /* LINEトークモック */
+  .phone{background:#DCE7EA;border-radius:20px;padding:14px 12px 16px;margin:10px 0;}
+  .phone-top{text-align:center;font-size:11px;font-weight:700;color:var(--slate-d);margin-bottom:10px;}
+  .row{display:flex;margin:8px 0;align-items:flex-end;gap:6px;}
+  .row.right{justify-content:flex-end;}
+  .ava{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    font-size:12px;background:#fff;color:var(--slate-d);box-shadow:0 1px 3px rgba(0,0,0,.1);}
+  .bub{max-width:78%;padding:9px 12px;border-radius:16px;font-size:13px;line-height:1.55;}
+  .bub.cust{background:#fff;color:var(--cust-ink);border-bottom-left-radius:5px;}
+  .bub.staff{background:var(--rose);color:#fff;border-bottom-right-radius:5px;}
+  .bub.staff.q{position:relative;}
+  .tag-q{display:inline-block;margin-top:5px;font-size:10.5px;font-weight:800;background:rgba(255,255,255,.28);
+    border-radius:10px;padding:1px 8px;}
+
+  /* Before/After */
+  .ba{display:grid;grid-template-columns:1fr;gap:10px;}
+  .ba-col{border-radius:14px;padding:13px 14px;}
+  .ba-before{background:#F3F1EF;border:1px dashed #C9C2BB;}
+  .ba-after{background:var(--rose-soft);border:1px solid var(--rose);}
+  .ba-lbl{font-size:11px;font-weight:800;letter-spacing:.04em;margin-bottom:6px;}
+  .ba-before .ba-lbl{color:#A79E96;}
+  .ba-after .ba-lbl{color:var(--rose-d);}
+  .ba-msg{font-size:13px;line-height:1.6;}
+  .ba-before .ba-msg{color:#8A837C;}
+  .strike-word{color:#C0554E;font-weight:700;text-decoration:line-through;}
+
+  /* 懸念別カード */
+  .concern{background:#fff;border-radius:14px;padding:13px 15px;margin-bottom:10px;box-shadow:0 3px 12px rgba(76,107,115,.07);}
+  .concern .head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .concern .pin{font-size:11px;font-weight:800;color:#fff;border-radius:10px;padding:2px 10px;}
+  .pin.a{background:var(--slate);}
+  .pin.b{background:var(--rose-d);}
+  .concern .name{font-size:14px;font-weight:800;color:var(--ink);}
+  .concern .reply{background:var(--rose);color:#fff;border-radius:14px;border-bottom-right-radius:5px;
+    padding:10px 13px;font-size:13px;line-height:1.55;}
+  .concern .why{font-size:11.5px;color:var(--muted);margin-top:7px;}
+
+  .legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);margin:2px 2px 12px;flex-wrap:wrap;}
+  .legend b{color:var(--slate-d);}
+  .legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:0;margin-right:3px;}
+
+  .note{font-size:12px;color:var(--muted);margin:8px 2px 0;}
+  .sched{display:flex;flex-direction:column;gap:8px;}
+  .sched .s{display:flex;gap:10px;font-size:13px;align-items:baseline;}
+  .sched .d{font-weight:800;color:var(--rose-d);white-space:nowrap;font-size:12px;}
+  .foot{max-width:560px;margin:14px auto 0;padding:0 16px;font-size:11px;color:var(--muted);text-align:center;}
+  @media (max-width:400px){ .bub,.concern .reply{font-size:12.5px;} }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="en">Nurturing Update</div>
+  <h1>追客の配信、アップデート案</h1>
+  <div class="sub">返信のあとの「会話」を、もっと続けるために｜Merone</div>
+</div>
+
+<div class="wrap">
+
+  <!-- 今の状況 -->
+  <div class="sec-title">いま、ここまで来ています</div>
+  <div class="lead">返信をもらう力は、はっきり上がりました🌸</div>
+  <div class="card">
+    <div class="nums">
+      <div class="num"><div class="big">新<em>27.5%</em></div><div class="lbl">返信率（従来19.7%）</div></div>
+      <div class="num"><div class="big">新<em>4.5時間</em></div><div class="lbl">返信の速さ（従来6日）</div></div>
+      <div class="num"><div class="big"><em>27.8%</em></div><div class="lbl">配信を増やしても維持</div></div>
+    </div>
+    <p class="note">次の課題は「ラリーが続かない」こと。ここには理由があります。お客様の返信に30分以内で返すと会話の続く率は約41%。でも新案は夜21時配信で夜の返信が多く、翌朝対応になって続く率が32.0%（従来38.6%）に下がっています。<br><b style="color:var(--slate-d)">＝ 返信は取れている。取れた返信を「会話」につなげる所が、次の伸びしろです。</b></p>
+  </div>
+
+  <!-- 上げる数字 -->
+  <div class="sec-title rose">これから上げる数字</div>
+  <div class="lead">3段で見ます。今は①が伸びて②でこぼれています。</div>
+  <div class="stair">
+    <div class="step"><div class="no">1</div><div class="txt"><b>返信をもらう</b>（返信率）<br>今27.5% → <span class="g">目標37%</span></div></div>
+    <div class="arrow-c">▼</div>
+    <div class="step now"><div class="no">2</div><div class="txt"><b>会話が続く</b>（ラリー継続率）★今回のメイン<br>今32.0% → <span class="g">従来の38.6%より上へ</span></div></div>
+    <div class="arrow-c">▼</div>
+    <div class="step"><div class="no">3</div><div class="txt"><b>ご入会につながる</b>（成約率）<br>今1.06%を積み上げ</div></div>
+  </div>
+
+  <!-- ヒアリング -->
+  <div class="sec-title">入会された方に、聞いてきました</div>
+  <div class="lead">7月に体験→翌日入会の方へお電話。3つ分かりました。</div>
+  <div class="card" style="padding-top:14px;">
+    <div class="voice"><div class="q">① 決め手は「速さ」より「丁寧さ」</div>「担当がどんな方かは分からないけど、チャットの丁寧さでやってみようと思った」「速いレスは求めていない。その日に返信があれば嬉しい」</div>
+    <div class="voice"><div class="q">② 期限で急かされると冷める</div>「期限をつけられると冷めてしまう」他社では「今月中に入らないと倍」と急かされ→見送り。特典そのものは最後のひと押しにはなった。</div>
+    <div class="voice"><div class="q">③ 背中を押したのは「時間の見える化」</div>「月に何時間くらいか出してもらえた。習い事（ピラティス）の月謝くらいなら出せると思えた」金額より、生活に置き換えられたこと。</div>
+  </div>
+
+  <!-- 変更1 懸念別テンプレ -->
+  <div class="sec-title rose">変える所①　6択のあとの「返し方」</div>
+  <div class="lead">お客様の懸念に合わせて、返しを2種類に分けます。</div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--slate)"></span><b>A 迷いを整理する</b>（費用・自信・他社比較）</span>
+    <span><span class="sw" style="background:var(--rose-d)"></span><b>B 材料を渡す</b>（持ち帰り・家族相談）</span>
+  </div>
+
+  <div class="concern">
+    <div class="head"><span class="pin a">A</span><span class="name">費用が気になる</span></div>
+    <div class="reply">お金のこと、いちばん大事な確認ですよね。月々のお支払いを抑える方法（分割など）も一緒に確認できます。差し支えなければ、月いくらくらいまでなら安心か、ざっくり教えていただけますか？</div>
+  </div>
+  <div class="concern">
+    <div class="head"><span class="pin a">A</span><span class="name">自分にできるか自信がない</span></div>
+    <div class="reply">最初はみなさん同じ気持ちからスタートされています。「これならできそう」と思える形を一緒に見つけたいのですが、いま一番「できるかな」と感じるのはどんなところですか？</div>
+  </div>
+  <div class="concern">
+    <div class="head"><span class="pin a">A</span><span class="name">他のスクールとも比べたい</span></div>
+    <div class="reply">比べてから決めるの、とても良い進め方だと思います。どちらのスクールとお迷いですか？違いを正直にお伝えしますね。</div>
+  </div>
+  <div class="concern">
+    <div class="head"><span class="pin b">B</span><span class="name">家族に相談してから決めたい</span></div>
+    <div class="reply">ご家族との相談、大事な時間ですよね。お話しされる時にそのまま見せられる「まとめ1枚」をご用意できます。お渡ししましょうか？</div>
+    <div class="why">→ 聞くより「材料」を渡す。急かさない。</div>
+  </div>
+  <div class="concern">
+    <div class="head"><span class="pin b">B</span><span class="name">自分のペースで考えたい／持ち帰り</span></div>
+    <div class="reply">ご自身のペース、大切になさってくださいね。急かすご連絡はしません。考える材料として、月にどれくらいの時間で進められるかの目安をお送りしてもよろしいですか？</div>
+    <div class="why">→ この層は成約に一番近い。材料で支える。</div>
+  </div>
+  <div class="concern">
+    <div class="head"><span class="pin a">A</span><span class="name">その他・モヤモヤ</span></div>
+    <div class="reply">教えてくださってありがとうございます。モヤッとの正体を一緒に整理させてください。いま感じていること、もう少しだけ聞かせていただけますか？</div>
+  </div>
+  <p class="note">※全部の返しを「？」か「お渡ししましょうか？」で終えています。これがラリーを続けるコツです。</p>
+
+  <!-- 変更2 時間×月謝 -->
+  <div class="sec-title rose">変える所②　「時間×月謝」の材料を足す</div>
+  <div class="lead">入会金のハードルを越えさせた、あの一言を配信に。</div>
+  <div class="phone">
+    <div class="phone-top">Day3｜費用・持ち帰りの方へ</div>
+    <div class="row right">
+      <div class="bub staff">〇〇さんのペースだと、1週間に〇時間ほど、1日にすると〇分くらいのイメージです☕<br>ちょうど習い事に通うくらいの時間と費用で、スキルが残っていく形ですね。<br>ご自身の生活に置き換えると、どのくらいなら続けられそうですか？<span class="tag-q">？で終える</span></div>
+      <div class="ava">SHE</div>
+    </div>
+  </div>
+  <p class="note">※〇時間の部分は、プランごとの目安時間をいただければ数字を入れて完成させます。</p>
+
+  <!-- 変更3 圧抜き -->
+  <div class="sec-title rose">変える所③　「期限の圧」を抜く（事実は残す）</div>
+  <div class="lead">急かすと冷める、はご本人の言葉。Day7を変えます。</div>
+  <div class="ba">
+    <div class="ba-col ba-before">
+      <div class="ba-lbl">今（圧が強い）</div>
+      <div class="ba-msg"><span class="strike-word">本日が最後のチャンス</span>です！このあとは<span class="strike-word">定価での入会になる可能性</span>があります。迷っている方は【迷い】とご返信ください。</div>
+    </div>
+    <div class="ba-col ba-after">
+      <div class="ba-lbl">変更後（事実は残す・圧は抜く）</div>
+      <div class="ba-msg">特典の期限が本日までのため、ご連絡しました。迷っていることを、迷っているままお話しいただいて大丈夫です。「決める」ためではなく「整理する」ためのお時間として使ってくださいね。今いちばん近いお気持ちを、一言だけ教えていただけますか？</div>
+    </div>
+  </div>
+
+  <!-- 変更4 ラリー継続 -->
+  <div class="sec-title rose">変える所④　会話を続ける「夜の一言」★メイン</div>
+  <div class="lead">夜に来た返信を放置しない。これが続く率を上げます。</div>
+  <div class="phone">
+    <div class="phone-top">夜22:30｜お客様から返信が来た</div>
+    <div class="row">
+      <div class="ava">😊</div>
+      <div class="bub cust">お返事ありがとうございます。ちょっと考えてみますね。</div>
+    </div>
+    <div class="row right">
+      <div class="bub staff">メッセージありがとうございます🌙<br>明日の朝いちばんに、〇〇さんに合わせてゆっくりお返事しますね。</div>
+    </div>
+  </div>
+  <p class="note">この一言だけで「読んでもらえた」安心が生まれ、翌朝の返信までつながります。今いちばん続く率が下がっているのが、この夜の放置部分です。</p>
+
+  <!-- Day14/21 -->
+  <div class="sec-title">おまけ　Day14・Day21にそっと様子伺い</div>
+  <div class="lead">ご入会の多くは体験の2〜4日後、持ち帰りの方は2〜3週間かかることも。今はDay10で終わっています。</div>
+  <div class="phone">
+    <div class="phone-top">Day21｜最後のひと声</div>
+    <div class="row right">
+      <div class="bub staff">レッスンから3週間ほど経ちましたので、最後にご様子だけ伺わせてください🌸<br>今も少し気持ちが残っていましたら、AとBどちらが近いですか？<br>A 前向きだけど、あと一歩<br>B 今回は見送りたい<br>Bでも大丈夫です、すっきり決められるお手伝いをしますね。<span class="tag-q">Bも選べる＝本音が返る</span></div>
+      <div class="ava">SHE</div>
+    </div>
+  </div>
+
+  <!-- 手をかけない -->
+  <div class="card" style="background:var(--slate-soft);box-shadow:none;margin-top:16px;">
+    <div style="font-size:13px;color:var(--slate-d);"><b>反応しない層には、手をかけません。</b><br>「独学希望」「試してから決めたい」の方は、文面を変えても返信0〜6.7%・成約0件でした。ここに時間をかけるより、「迷っている層」と「持ち帰る層」に集中する方が、ご入会は伸びます。</div>
+  </div>
+
+  <!-- スケジュール -->
+  <div class="sec-title rose">これからの進め方</div>
+  <div class="card">
+    <div class="sched">
+      <div class="s"><span class="d">8/27(水)</span><span>この案でよければ、返しテンプレ6種の清書版をお渡しします</span></div>
+      <div class="s"><span class="d">9月第1週</span><span>夜の一言つなぎ・時間×月謝の材料を運用スタート</span></div>
+      <div class="s"><span class="d">毎週</span><span>ラリー継続率と成約率を見て、効いた懸念から磨きます</span></div>
+    </div>
+    <p class="note">「時間×月謝」を数字入りにするため、プランごとの目安時間（例：ライトプランなら月◯時間）だけ教えてください🌸</p>
+  </div>
+
+</div>
+<div class="foot">Merone｜カスタマー対応 追客配信アップデート案（社内共有用モック）</div>
+</body>
+</html>
